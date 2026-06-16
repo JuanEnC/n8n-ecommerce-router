@@ -1,0 +1,14 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n_primary
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      # Configuracion de zona horaria para programacion precisa de flujos
+      - GENERIC_TIMEZONE=America/Mexico_City
+      - TZ=America/Mexico_City
+    volumes:
+      # Persistencia de base de datos y configuraciones locales
+      - ./n8n_data:/home/node/.n8n

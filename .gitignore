@@ -1,0 +1,11 @@
+# Directorio de persistencia de n8n (Contiene SQLite y llaves de encriptacion)
+n8n_data/
+
+# Variables de entorno y secretos locales
+.env
+*.pem
+*.key
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db

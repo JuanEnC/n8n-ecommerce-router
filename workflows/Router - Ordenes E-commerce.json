@@ -1,0 +1,559 @@
+{
+  "name": "Router - Ordenes E-commerce",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-test/nueva-orden",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -352,
+        -160
+      ],
+      "id": "21d096e8-5420-4c75-8a86-08217c18bd63",
+      "name": "Trigger - Recibir Orden",
+      "webhookId": "WEBHOOK_ID_REMOVIDO"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.payment.total_amount }}",
+                    "rightValue": 1000,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    },
+                    "id": "b49df485-2d85-4293-89ba-fb8e87bbeca4"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Orden VIP"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        -160
+      ],
+      "id": "606d202f-08ca-4345-8128-36298ce96061",
+      "name": "Switch - Evaluar Monto"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a858ac2-da47-471f-bbf9-da9085140aa5",
+              "name": "ID Orden",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "585d220a-bb71-44ed-ac3b-2e52abeda7eb",
+              "name": "Cliente",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.customer.name }}",
+              "type": "string"
+            },
+            {
+              "id": "4fcb66b4-ae31-4880-877a-20e4e9f1c144",
+              "name": "Email",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.customer.email }}",
+              "type": "string"
+            },
+            {
+              "id": "1a310181-0a04-4669-a37f-db3f12cd0cf8",
+              "name": "Total",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.payment.total_amount }}",
+              "type": "string"
+            },
+            {
+              "id": "826fb7a2-eb2a-400f-97b9-51e6ddbd52ff",
+              "name": "Estado",
+              "value": "Requiere Atención Prioritaria",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -256
+      ],
+      "id": "7abf77db-7b35-47e4-9b67-70d1c1dca99c",
+      "name": "Limpiar Datos - VIP"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a858ac2-da47-471f-bbf9-da9085140aa5",
+              "name": "ID Orden",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "585d220a-bb71-44ed-ac3b-2e52abeda7eb",
+              "name": "Cliente",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.customer.name }}",
+              "type": "string"
+            },
+            {
+              "id": "4fcb66b4-ae31-4880-877a-20e4e9f1c144",
+              "name": "Email",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.customer.email }}",
+              "type": "string"
+            },
+            {
+              "id": "1a310181-0a04-4669-a37f-db3f12cd0cf8",
+              "name": "Total",
+              "value": "={{ $('Trigger - Recibir Orden').item.json.body.payment.total_amount }}",
+              "type": "string"
+            },
+            {
+              "id": "826fb7a2-eb2a-400f-97b9-51e6ddbd52ff",
+              "name": "Estado",
+              "value": "Procesamiento Normal",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        -112
+      ],
+      "id": "f3b26f5f-8bf5-481e-951a-275ce32d9ad0",
+      "name": "Limpiar Datos - Orden Estandar"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "ID_DEL_DOCUMENTO_OCULTO",
+          "mode": "list",
+          "cachedResultName": "n8n E-Commerce",
+          "cachedResultUrl": "URL_DEL_DOCUMENTO_OCULTA"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "URL_DEL_DOCUMENTO_OCULTA"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Orden",
+              "displayName": "Orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        -272
+      ],
+      "id": "e2a228cb-ad0d-45bf-bcff-54897a84b465",
+      "name": "Sheets - Registrar VIP",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID_CREDENCIAL_OCULTA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "ID_DEL_DOCUMENTO_OCULTO",
+          "mode": "list",
+          "cachedResultName": "n8n E-Commerce",
+          "cachedResultUrl": "URL_DEL_DOCUMENTO_OCULTA"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "URL_DEL_DOCUMENTO_OCULTA"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Orden",
+              "displayName": "Orden",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        240,
+        -96
+      ],
+      "id": "b86475f3-16e4-4f46-9ba1-58f662c513d8",
+      "name": "Sheets - Registrar Orden Estandar",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID_CREDENCIAL_OCULTA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "= ATENCIÓN ALMACÉN: NUEVA ORDEN VIP \nID de Orden: {{$json[\"ID Orden\"]}}\nCliente: {{$json[\"Cliente\"]}}\nMonto: ${{$json[\"Total\"]}}\nEstado: {{$json[\"Estado\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -288
+      ],
+      "id": "4b288fd9-9be8-4f1c-8004-356417bf7dd7",
+      "name": "Notificar - Almacen VIP",
+      "webhookId": "WEBHOOK_ID_REMOVIDO",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "ID_CREDENCIAL_OCULTA",
+          "name": "Discord Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=ALMACÉN: NUEVA ORDEN\nID de Orden: {{$json[\"ID Orden\"]}}\nCliente: {{$json[\"Cliente\"]}}\nMonto: ${{$json[\"Total\"]}}\nEstado: {{$json[\"Estado\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -80
+      ],
+      "id": "42f8000a-5790-40ce-95ed-b0ecb14a0974",
+      "name": "Notificar - Almacen Estandar",
+      "webhookId": "WEBHOOK_ID_REMOVIDO",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "ID_CREDENCIAL_OCULTA",
+          "name": "Discord Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "CORREO_REMITENTE_AQUI",
+        "toEmail": "={{ $('Trigger - Recibir Orden').item.json.body.customer.email }}",
+        "subject": "=Confirmación de tu orden {{$json[\"ID Orden\"]}}",
+        "emailFormat": "text",
+        "text": "=Hola {{$json[\"Cliente\"]}},\nHemos recibido tu orden {{$json[\"ID Orden\"]}} por un total de ${{$json[\"Total\"]}}.\nNuestro equipo ya está procesando tu paquete con prioridad VIP. Te notificaremos cuando esté en camino.\nGracias por tu compra.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        688,
+        -304
+      ],
+      "id": "4c1cb7f2-5c55-4283-bb61-a6fd4535b164",
+      "name": "Email - Recibo Cliente VIP",
+      "webhookId": "WEBHOOK_ID_REMOVIDO",
+      "credentials": {
+        "smtp": {
+          "id": "ID_CREDENCIAL_OCULTA",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "CORREO_REMITENTE_AQUI",
+        "toEmail": "={{ $('Trigger - Recibir Orden').item.json.body.customer.email }}",
+        "subject": "=Confirmación de tu orden {{ $('Trigger - Recibir Orden').item.json.body.order_id }}",
+        "emailFormat": "text",
+        "text": "=Hola {{ $('Trigger - Recibir Orden').item.json.body.customer.name }},\nHemos recibido tu orden {{ $('Trigger - Recibir Orden').item.json.body.order_id }} por un total de $ {{ $('Trigger - Recibir Orden').item.json.body.payment.total_amount }}.\nNuestro equipo ya está procesando tu paquete. Te notificaremos cuando esté en camino.\nGracias por tu compra.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        688,
+        -64
+      ],
+      "id": "74a2a05b-4b4f-4abd-9c2c-1ac4d4e5a055",
+      "name": "Email - Recibo Cliente",
+      "webhookId": "WEBHOOK_ID_REMOVIDO",
+      "credentials": {
+        "smtp": {
+          "id": "ID_CREDENCIAL_OCULTA",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Trigger - Recibir Orden": {
+      "main": [
+        [
+          {
+            "node": "Switch - Evaluar Monto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch - Evaluar Monto": {
+      "main": [
+        [
+          {
+            "node": "Limpiar Datos - VIP",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limpiar Datos - Orden Estandar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpiar Datos - VIP": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Registrar VIP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limpiar Datos - Orden Estandar": {
+      "main": [
+        [
+          {
+            "node": "Sheets - Registrar Orden Estandar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - Registrar VIP": {
+      "main": [
+        [
+          {
+            "node": "Notificar - Almacen VIP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - Registrar Orden Estandar": {
+      "main": [
+        [
+          {
+            "node": "Notificar - Almacen Estandar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notificar - Almacen VIP": {
+      "main": [
+        [
+          {
+            "node": "Email - Recibo Cliente VIP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notificar - Almacen Estandar": {
+      "main": [
+        [
+          {
+            "node": "Email - Recibo Cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b208393e-7427-4081-a2ca-d784e8a94296",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ID_DE_INSTANCIA_OCULTA"
+  },
+  "nodeGroups": [],
+  "id": "lgTMtMQ4ezj75u9n",
+  "tags": []
+}
